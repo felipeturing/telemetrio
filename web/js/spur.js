@@ -40,7 +40,8 @@ function isCluster(feature) {
 }
 
 window.onload = function() {
-	var count = puntos.ciudades.length;
+	//~ var count = puntos.ciudades.length;
+	var count = 500
 	features = new Array(count);
 	var e = 10500000;
 	for (var i = 0; i < count; ++i) {
@@ -147,7 +148,7 @@ window.onload = function() {
 			//~ console.log(feature.get('features')[0].get('name'));
 		}
 	});
-	
+	conectar();
 	//~ console.log("ejecutado.")
 }
 
@@ -175,3 +176,23 @@ function robandoMarcador(indice, lng, lat) {
 		}
 	},delay)
 }
+
+
+var ws
+function conectar(){
+	ws = new WebSocket("ws://efectibit.com:314")
+	ws.onmessage = function(event) {
+		let s = event.data.split(",")
+		//console.log(s)
+		if( s.length == 3 ){
+			moverMarcador(s[0], s[1], s[2])
+		}
+	}
+	ws.onopen = function (){
+		ws.send("ego")
+		console.log("ego enviado")
+	}
+	console.log("Conectado")
+}
+
+
